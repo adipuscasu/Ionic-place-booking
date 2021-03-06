@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { PlacesService } from '../../places.service';
 
 import { OfferBookingsPage } from './offer-bookings.page';
 

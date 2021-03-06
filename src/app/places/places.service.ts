@@ -31,4 +31,8 @@ get places(){
   return [...this._places];
 }
   constructor() { }
+
+  public getPlace(placeId: string){
+    return [...this._places].find(p => p.id === placeId);
+  }
 }
