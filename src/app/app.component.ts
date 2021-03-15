@@ -44,7 +44,6 @@ export class AppComponent {
     StatusBar.show();
   }
   onLogout() {
-    console.log('logging out: ');
     this.authService.logout();
     this.router.navigateByUrl('/auth');
   }
