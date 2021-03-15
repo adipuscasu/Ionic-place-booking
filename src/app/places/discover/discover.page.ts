@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 import { Place } from '../place.model';
 import { PlacesService } from '../places.service';
 
@@ -11,11 +12,11 @@ export class DiscoverPage implements OnInit {
   public loadedPlaces: Array<Place>;
 
   constructor(
-    private readonly _placesService: PlacesService
+    private readonly _placesService: PlacesService,
+    private readonly _menuController: MenuController
   ) { }
 
   ngOnInit() {
     this.loadedPlaces = this._placesService.places;
   }
-
 }
