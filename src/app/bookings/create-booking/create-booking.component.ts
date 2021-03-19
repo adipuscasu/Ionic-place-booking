@@ -16,10 +16,10 @@ export class CreateBookingComponent implements OnInit {
 
   ngOnInit() {}
   onBookPlace(){
-
+    this._modalCtrl.dismiss({message: 'This is a dummmy message!'}, 'confirm');
   }
 
   onCancel(){
-    this._modalCtrl.dismiss();
+    this._modalCtrl.dismiss(null, 'cancel');
   }
 }
