@@ -10,6 +10,7 @@ import { PlacesService } from '../places.service';
 })
 export class DiscoverPage implements OnInit {
   public loadedPlaces: Array<Place>;
+  public loadedListPlaces: Array<Place>;
 
   constructor(
     private readonly _placesService: PlacesService,
@@ -18,5 +19,6 @@ export class DiscoverPage implements OnInit {
 
   ngOnInit() {
     this.loadedPlaces = this._placesService.places;
+    this.loadedListPlaces = this.loadedPlaces;
   }
 }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button id="m1" ></ion-menu-button>
+      <ion-menu-button id="m1"></ion-menu-button>
       <!-- <ion-button (click)="onOpenMenu()">
         <ion-icon name="menu"></ion-icon>
       </ion-button> -->
@@ -23,7 +23,11 @@
           </ion-card-header>
           <ion-img [src]="loadedPlaces[0].imageUrl"></ion-img>
           <ion-card-content>
-            <p>{{loadedPlaces[0].description}}</p>
+            <p class="ion-text-center">
+              <ion-text color="success"
+                >{{loadedPlaces[0].description}}</ion-text
+              >
+            </p>
           </ion-card-content>
           <div class="ion-text-center">
             <ion-button
@@ -37,17 +41,20 @@
                   loadedPlaces[0].id
                   ]"
             >
-            More
+              More
             </ion-button>
           </div>
         </ion-card>
       </ion-col>
     </ion-row>
     <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
-      <ion-list>
-        <ion-item *ngFor="let place of loadedPlaces.slice(1)"
-        [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
-        detail>
+      <ion-virtual-scroll [items]="loadedListPlaces" approxFooterHeight="70px;">
+        <ion-item
+
+          [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
+          detail
+          *virtualItem="let place"
+        >
           <ion-thumbnail slot="start">
             <ion-img [src]="place.imageUrl"></ion-img>
           </ion-thumbnail>
@@ -56,7 +63,7 @@
             <p>{{place.description}}</p>
           </ion-label>
         </ion-item>
-      </ion-list>
+      </ion-virtual-scroll>
     </ion-col>
   </ion-grid>
 </ion-content>
