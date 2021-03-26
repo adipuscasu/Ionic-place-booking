@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import { ActionSheetController, ModalController, NavController } from '@ionic/angular';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
@@ -17,7 +17,8 @@ export class PlaceDetailPage implements OnInit {
     private readonly _navCtrl: NavController,
     private readonly _placesService: PlacesService,
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _modalCtrl: ModalController
+    private readonly _modalCtrl: ModalController,
+    private readonly _actionSheetController: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -31,9 +32,43 @@ export class PlaceDetailPage implements OnInit {
   }
 
   onBookPlace() {
+    this._actionSheetController.create({
+      header: 'Choose an action',
+      buttons: [{
+        icon: 'calendar-outline',
+        text: 'Select date',
+        handler: () => {
+          this.openBookingModal('select');
+        }
+      },
+    {
+      icon: 'dice-outline',
+      text: 'Random date',
+      handler: () =>{
+        this.openBookingModal('random');
+
+      }
+    },{
+      icon: 'stop-circle-outline',
+      text: 'Cancel',
+      role: 'destructive'
+    }]
+    }).then((actionElement) =>{
+      actionElement.present();
+    })
     // this._router.navigate(['/places/tabs/discover']);
     // this._navCtrl.navigateBack('/places/tabs/discover');
     console.log('place: ', this.place);
+
+  }
+
+  openBookingModal(mode: 'select' | 'random'){
+    if(mode === 'select') {
+      console.log('select was chosen');
+    } else {
+      console.log('random');
+    }
+
     this._modalCtrl.create({
       component: CreateBookingComponent,
       componentProps: {selectedPlace: this.place}

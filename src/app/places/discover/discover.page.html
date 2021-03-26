@@ -11,6 +11,11 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-segment value="all" (ionChange)="onFilterUpdate($event)">
+    <ion-segment-button value="all" class="ion-sb-color-checked">All Places</ion-segment-button>
+    <ion-segment-button value="bookable">Bookable Places</ion-segment-button>
+  </ion-segment>
   <ion-grid>
     <ion-row>
       <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
