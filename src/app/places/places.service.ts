@@ -35,4 +35,14 @@ get places(){
   public getPlace(placeId: string){
     return [...this._places].find(p => p.id === placeId);
   }
+
+  public savePlace(updatedPlace: Place){
+    this._places.map((place)=>{
+      if(place.id === updatedPlace.id){
+        place.title = updatedPlace.title;
+        place.description = updatedPlace.description;
+        return place;
+      }
+    })
+  }
 }

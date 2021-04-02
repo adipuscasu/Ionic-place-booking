@@ -26,4 +26,5 @@ export class OffersPage implements OnInit {
     this._router.navigate(['/','places', 'tabs','offers', 'edit', offerId]);
     console.log('Editing item: ', offerId);
   }
+
 }
