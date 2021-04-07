@@ -8,18 +8,41 @@ import { Place } from 'src/app/places/place.model';
   styleUrls: ['./create-booking.component.scss'],
 })
 export class CreateBookingComponent implements OnInit {
-@Input() selectedPlace: Place;
+  @Input() selectedPlace: Place;
+  @Input() selectedMode: 'select' | 'random';
+  public startDate: string;
+  public endDate: string;
 
-  constructor(
-    private readonly _modalCtrl: ModalController
-  ) { }
+  constructor(private readonly _modalCtrl: ModalController) {}
 
-  ngOnInit() {}
-  onBookPlace(){
-    this._modalCtrl.dismiss({message: 'This is a dummmy message!'}, 'confirm');
+  ngOnInit() {
+    const availableFrom = new Date(this.selectedPlace.availableFrom);
+    const availableTo = new Date(this.selectedPlace.availableTo);
+    if (this.selectedMode === 'random') {
+      const startDateMilliseconds = availableFrom.getTime() +
+      Math.random() *
+      (availableTo.getTime() -
+        7 * 24 * 60 * 60 * 1000 -
+        availableTo.getTime());
+      this.startDate = new Date(startDateMilliseconds).toISOString();
+
+      this.endDate = new Date(
+        new Date(this.startDate).getTime() +
+          Math.random() *
+            (new Date(this.startDate).getTime() +
+              6 * 24 * 60 * 60 * 1000 -
+              new Date(this.startDate).getTime())
+      ).toISOString();
+    }
+  }
+  onBookPlace() {
+    this._modalCtrl.dismiss(
+      { message: 'This is a dummmy message!' },
+      'confirm'
+    );
   }
 
-  onCancel(){
+  onCancel() {
     this._modalCtrl.dismiss(null, 'cancel');
   }
 }
