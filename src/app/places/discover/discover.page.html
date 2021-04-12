@@ -53,22 +53,23 @@
       </ion-col>
     </ion-row>
     <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
-      <ion-virtual-scroll [items]="loadedListPlaces" approxFooterHeight="70px;">
-        <ion-item
-
-          [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
-          detail
-          *virtualItem="let place"
-        >
-          <ion-thumbnail slot="start">
-            <ion-img [src]="place.imageUrl"></ion-img>
-          </ion-thumbnail>
-          <ion-label>
-            <h2>{{place.title}}</h2>
-            <p>{{place.description}}</p>
-          </ion-label>
-        </ion-item>
-      </ion-virtual-scroll>
+      <ng-template [ngIf]="loadedListPlaces && loadedListPlaces.length">
+        <ion-virtual-scroll [items]="loadedListPlaces" [trackBy]="trackByFn" approxFooterHeight="70px;">
+          <ion-item
+            [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
+            detail
+            *virtualItem="let place"
+          >
+            <ion-thumbnail slot="start">
+              <ion-img [src]="place.imageUrl"></ion-img>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{place.title}}</h2>
+              <p>{{place.description}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-virtual-scroll>
+      </ng-template>
     </ion-col>
   </ion-grid>
 </ion-content>

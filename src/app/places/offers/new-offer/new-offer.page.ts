@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PlacesService } from '../../places.service';
 
 @Component({
   selector: 'app-new-offer',
@@ -9,35 +11,45 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class NewOfferPage implements OnInit {
   form: FormGroup;
 
-  constructor() { }
+  constructor(private placesService: PlacesService, private router: Router) {}
 
   ngOnInit() {
     this.form = new FormGroup({
       title: new FormControl(null, {
-        updateOn : 'blur',
-        validators: [Validators.required]
-      }),
-      description : new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.required, Validators.maxLength(180)]
+        validators: [Validators.required],
+      }),
+      description: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required, Validators.maxLength(180)],
       }),
       price: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.min(1), Validators.required]
+        validators: [Validators.min(1), Validators.required],
       }),
       dateFrom: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
       dateTo: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.required]
-      })
-    })
+        validators: [Validators.required],
+      }),
+    });
   }
-  onCreateOffer(){
+  onCreateOffer() {
     console.log('on create offer');
     const title = this.form.controls.title.value;
-    console.log('title:' , title);
+    console.log('title:', title);
+    this.placesService.addPlace(
+      this.form.value.title,
+      this.form.value.description,
+      +this.form.value.price,
+      new Date(this.form.value.dateFrom),
+      new Date(this.form.value.dateTo)
+    );
+    // reset the form
+    this.form.reset();
+    this.router.navigate(['/places/tabs/offers']);
   }
 }
