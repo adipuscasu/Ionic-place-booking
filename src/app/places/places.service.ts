@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take, map, tap, delay } from 'rxjs/operators';
 import { Place } from './place.model';
 
 @Injectable({
@@ -39,14 +40,22 @@ export class PlacesService {
       'adsdf '
     ),
   ];
-  public placesChanged$ = new  BehaviorSubject<Array<Place>>(this._places);
+  public placesChanged$ = new BehaviorSubject<Array<Place>>(this._places);
   public places$ = this.placesChanged$.asObservable();
 
+  get places() {
+    return this.places$;
+  }
 
   constructor(private authService: AuthService) {}
 
   public getPlace(placeId: string) {
-    return [...this._places].find((p) => p.id === placeId);
+    return this.places.pipe(
+      take(1),
+      map((places) => {
+        return [...places].find((p) => p.id === placeId);
+      })
+    );
   }
   public addPlace(
     title: string,
@@ -54,7 +63,7 @@ export class PlacesService {
     price: number,
     dateFrom: Date,
     dateTo: Date
-  ) {
+  ): Observable<Array<Place>> {
     console.log('addPlace got called: ', title, price);
     const newPlace = new Place(
       Math.random().toString(),
@@ -66,18 +75,25 @@ export class PlacesService {
       dateTo,
       this.authService.userId
     );
-    this._places.push({...newPlace});
-    this.placesChanged$.next(this._places);
+    // this._places.push({...newPlace});
+    return this.places$.pipe(
+      take(1),
+      delay(2000),
+      tap((places) => {
+        this.placesChanged$.next(places.concat(newPlace));
+      })
+    );
   }
 
-  public savePlace(updatedPlace: Place) {
-    this._places.map((place) => {
-      if (place.id === updatedPlace.id) {
-        place.title = updatedPlace.title;
-        place.description = updatedPlace.description;
-        return place;
-      }
-    });
-    this.placesChanged$.next(this._places);
+  public updateOffer(updatedPlace: Place) {
+    return this.places$.pipe(take(1), tap((places: Array<Place>) => {
+      const updatedPlaceIndex = places.findIndex((place) => {
+        return place.id === updatedPlace.id;
+      });
+      places[updatedPlaceIndex].title = updatedPlace.title;
+      places[updatedPlaceIndex].description = updatedPlace.description;
+    }));
   }
+    // this.placesChanged$.next(this._places);
+
 }

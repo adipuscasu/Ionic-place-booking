@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import {SegmentChangeEventDetail} from '@ionic/core';
+import { SegmentChangeEventDetail } from '@ionic/core';
 import { Subscription } from 'rxjs';
 import { Place } from '../place.model';
 import { PlacesService } from '../places.service';
@@ -19,26 +19,30 @@ export class DiscoverPage implements OnInit, OnDestroy {
   constructor(
     private readonly _placesService: PlacesService,
     private readonly _menuController: MenuController
-  ) { }
+  ) {}
   trackByFn(index, item) {
     return item ? item.id : index;
   }
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 
   ngOnInit() {
     this.subscribeToPlaces();
   }
-  onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail> ){
+  onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
     console.log(typeof event);
     console.log('event: ', event.detail);
   }
-  private subscribeToPlaces(){
-    const offersSubscription = this._placesService.places$.subscribe((places) => {
-      this.loadedPlaces = places;
-      this.loadedListPlaces = this.loadedPlaces;
-    });
+  private subscribeToPlaces() {
+    const offersSubscription = this._placesService.places$.subscribe(
+      (places) => {
+        this.loadedPlaces = places;
+        this.loadedListPlaces = this.loadedPlaces;
+      }
+    );
     this._subscription.add(offersSubscription);
   }
 }

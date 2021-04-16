@@ -15,28 +15,30 @@ export class OffersPage implements OnInit, OnDestroy {
   public offers: Array<Place>;
   constructor(
     private readonly _placesService: PlacesService,
-    private readonly _router: Router,
-
-  ) { }
+    private readonly _router: Router
+  ) {}
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 
   ngOnInit() {
-    this.subscribeToPlaces()
+    this.subscribeToPlaces();
   }
 
-  private subscribeToPlaces(){
-    const offersSubscription = this._placesService.places$.subscribe((places) => {
-      this.offers = places;
-    });
+  private subscribeToPlaces() {
+    const offersSubscription = this._placesService.places$.subscribe(
+      (places) => {
+        this.offers = places;
+      }
+    );
     this._subscription.add(offersSubscription);
   }
 
-  onEdit(offerId: string, slidingItem: IonItemSliding){
+  onEdit(offerId: string, slidingItem: IonItemSliding) {
     slidingItem.close();
-    this._router.navigate(['/','places', 'tabs','offers', 'edit', offerId]);
+    this._router.navigate(['/', 'places', 'tabs', 'offers', 'edit', offerId]);
     console.log('Editing item: ', offerId);
   }
-
 }

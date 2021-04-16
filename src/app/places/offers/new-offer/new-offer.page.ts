@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 
 @Component({
@@ -11,7 +12,11 @@ import { PlacesService } from '../../places.service';
 export class NewOfferPage implements OnInit {
   form: FormGroup;
 
-  constructor(private placesService: PlacesService, private router: Router) {}
+  constructor(
+    private placesService: PlacesService,
+    private readonly _loadingCtrl: LoadingController,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -38,18 +43,32 @@ export class NewOfferPage implements OnInit {
     });
   }
   onCreateOffer() {
-    console.log('on create offer');
-    const title = this.form.controls.title.value;
-    console.log('title:', title);
-    this.placesService.addPlace(
-      this.form.value.title,
-      this.form.value.description,
-      +this.form.value.price,
-      new Date(this.form.value.dateFrom),
-      new Date(this.form.value.dateTo)
-    );
-    // reset the form
-    this.form.reset();
-    this.router.navigate(['/places/tabs/offers']);
+    if (this.form.value.invalid) {
+      return;
+    }
+    this._loadingCtrl
+      .create({
+        message: 'Creating place ...',
+        spinner: 'circles',
+      })
+      .then((loadingEl) => {
+        loadingEl.present();
+        const title = this.form.controls.title.value;
+        console.log('title:', title);
+        this.placesService
+          .addPlace(
+            this.form.value.title,
+            this.form.value.description,
+            +this.form.value.price,
+            new Date(this.form.value.dateFrom),
+            new Date(this.form.value.dateTo)
+          )
+          .subscribe(() => {
+            loadingEl.dismiss();
+            // reset the form
+            this.form.reset();
+            this.router.navigate(['/places/tabs/offers']);
+          });
+      });
   }
 }
