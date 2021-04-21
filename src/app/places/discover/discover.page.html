@@ -16,60 +16,69 @@
     <ion-segment-button value="all" class="ion-sb-color-checked">All Places</ion-segment-button>
     <ion-segment-button value="bookable">Bookable Places</ion-segment-button>
   </ion-segment>
-  <ion-grid>
+  <ion-grid *ngIf="relevantPlaces && relevantPlaces.length === 0; else showAvailablePlaces">
     <ion-row>
       <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title> {{loadedPlaces[0].title}} </ion-card-title>
-            <ion-card-subtitle
-              >{{loadedPlaces[0].price | currency}}</ion-card-subtitle
-            >
-          </ion-card-header>
-          <ion-img [src]="loadedPlaces[0].imageUrl"></ion-img>
-          <ion-card-content>
-            <p class="ion-text-center">
-              <ion-text color="success"
-                >{{loadedPlaces[0].description}}</ion-text
-              >
-            </p>
-          </ion-card-content>
-          <div class="ion-text-center">
-            <ion-button
-              fill="clear"
-              color="primary"
-              [routerLink]="[
-              '/',
-               'places',
-                'tabs',
-                 'discover',
-                  loadedPlaces[0].id
-                  ]"
-            >
-              More
-            </ion-button>
-          </div>
-        </ion-card>
+        <p>There are no bookable places right now, please come back again later!</p>
       </ion-col>
     </ion-row>
-    <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
-      <ng-template [ngIf]="loadedListPlaces && loadedListPlaces.length">
-        <ion-virtual-scroll [items]="loadedListPlaces" [trackBy]="trackByFn" approxFooterHeight="70px;">
-          <ion-item
-            [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
-            detail
-            *virtualItem="let place"
-          >
-            <ion-thumbnail slot="start">
-              <ion-img [src]="place.imageUrl"></ion-img>
-            </ion-thumbnail>
-            <ion-label>
-              <h2>{{place.title}}</h2>
-              <p>{{place.description}}</p>
-            </ion-label>
-          </ion-item>
-        </ion-virtual-scroll>
-      </ng-template>
-    </ion-col>
   </ion-grid>
+  <ng-template #showAvailablePlaces>
+    <ion-grid >
+      <ion-row>
+        <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title> {{relevantPlaces[0].title}} </ion-card-title>
+              <ion-card-subtitle
+                >{{relevantPlaces[0].price | currency}}</ion-card-subtitle
+              >
+            </ion-card-header>
+            <ion-img [src]="relevantPlaces[0].imageUrl"></ion-img>
+            <ion-card-content>
+              <p class="ion-text-center">
+                <ion-text color="success"
+                  >{{relevantPlaces[0].description}}</ion-text
+                >
+              </p>
+            </ion-card-content>
+            <div class="ion-text-center">
+              <ion-button
+                fill="clear"
+                color="primary"
+                [routerLink]="[
+                '/',
+                 'places',
+                  'tabs',
+                   'discover',
+                    relevantPlaces[0].id
+                    ]"
+              >
+                More
+              </ion-button>
+            </div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-col size="12" sizeSm="8" offsetSm="2" text-center>
+        <ng-template [ngIf]="listedLoadedPlaces && listedLoadedPlaces.length">
+          <ion-virtual-scroll [items]="listedLoadedPlaces" [trackBy]="trackByFn" approxFooterHeight="70px;">
+            <ion-item
+              [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
+              detail
+              *virtualItem="let place"
+            >
+              <ion-thumbnail slot="start">
+                <ion-img [src]="place.imageUrl"></ion-img>
+              </ion-thumbnail>
+              <ion-label>
+                <h2>{{place.title}}</h2>
+                <p>{{place.description}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-virtual-scroll>
+        </ng-template>
+      </ion-col>
+    </ion-grid>
+  </ng-template>
 </ion-content>

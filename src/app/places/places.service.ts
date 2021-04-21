@@ -17,7 +17,7 @@ export class PlacesService {
       149.99,
       new Date('2019-01-01'),
       new Date('2019-12-31'),
-      'aab3'
+      'abcs'
     ),
     new Place(
       'p2',
@@ -27,7 +27,7 @@ export class PlacesService {
       189.99,
       new Date('2019-01-01'),
       new Date('2019-12-31'),
-      'as3ds'
+      'abc'
     ),
     new Place(
       'p3',
@@ -37,7 +37,7 @@ export class PlacesService {
       99.99,
       new Date('2019-01-01'),
       new Date('2019-12-31'),
-      'adsdf '
+      'abc'
     ),
   ];
   public placesChanged$ = new BehaviorSubject<Array<Place>>(this._places);
