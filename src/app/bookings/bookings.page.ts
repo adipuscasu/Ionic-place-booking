@@ -16,7 +16,9 @@ export class BookingsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadedBookings = this._bookingService.bookings;
+    this._bookingService.bookings$.subscribe((bookings) => {
+      this.loadedBookings = bookings;
+    })
   }
   public onCancelBooking(bookingId: string, slidingItem: IonItemSliding){
     console.log('deleting booking: ', bookingId);
